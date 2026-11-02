@@ -1,0 +1,10 @@
+Int x = 5 @ 3;
+String s = "no end
+Int abcdefghijklmnopq = 1;
+Char c = 'ab';
+Int 25abc = 2;
+x & y | z ~ w
+Char e = '';
+String t = "bad \q esc";
+## never closed
+Int after;

@@ -1,14 +1,22 @@
 package lexer;
 
+/**
+ * TokenType.java
+ * Lists every token type used by the GamiPhi lexical analyzer.
+ * The names follow the official GamiPhi token list exactly.
+ *
+ * Whitespace (space, tab, newline) is NOT a token type. The lexer reads
+ * whitespace so it can count lines and columns, but it skips it.
+ */
 public enum TokenType {
 
-    // -- A. Literals 
+    // ===== A. Literals =====
     INTEGER_LITERAL,
     DECIMAL_LITERAL,
     STRING_LITERAL,
     CHARACTER_LITERAL,
 
-    // -- B. Operators
+    // ===== B. Operators =====
     // Assignment operators
     ASSIGNMENT_OPERATOR,                 // =
     ADDITION_ASSIGNMENT_OPERATOR,        // +=
@@ -43,7 +51,7 @@ public enum TokenType {
     LESS_THAN_EQUAL_OPERATOR,            // <=
     MORE_THAN_EQUAL_OPERATOR,            // >=
 
-    // -- C. Delimiters
+    // ===== C. Delimiters =====
     STATEMENT_END_DELIMITER,             // ;
     COMMA_DELIMITER,                     // ,
     ACCESS_OBJECT_DELIMITER,             // .
@@ -54,7 +62,7 @@ public enum TokenType {
     OPEN_BLOCK_DELIMITER,                // {
     CLOSE_BLOCK_DELIMITER,               // }
 
-    // -- D. Keywords
+    // ===== D. Keywords (case-sensitive) =====
     MARK_KEYWORD,                        // Mark
     BOOL_DATA_TYPE,                      // Bool
     CHAR_DATA_TYPE,                      // Char
@@ -76,7 +84,7 @@ public enum TokenType {
     WRITE_KEYWORD,                       // Write
     RETURN_STATEMENT_KEYWORD,            // Return
 
-    // -- E. Reserved words
+    // ===== E. Reserved words =====
     ENTITY_RESERVE_WORD,                 // ENTITY
     COMP_RESERVE_WORD,                   // COMP
     BEHAVIOR_RESERVE_WORD,               // BEHAVIOR
@@ -95,7 +103,7 @@ public enum TokenType {
     TOUCH_RESERVE_WORD,                  // TOUCH
     INPUT_RESERVE_WORD,                  // INPUT
     TRIGGER_RESERVE_WORD,                // TRIGGER
-    TRIGGER_ON_RESERVE_WORD,             // TRIGGER_ON
+    TRIGGER_ON_RESERVE_WORD,             // TRIGGER_ON (one single token)
     AFTER_RESERVE_WORD,                  // AFTER
     SECONDS_RESERVE_WORD,                // SECONDS
     WAIT_RESERVE_WORD,                   // WAIT
@@ -104,19 +112,14 @@ public enum TokenType {
     PARALLEL_RESERVE_WORD,               // PARALLEL
     SPAN_RESERVE_WORD,                   // SPAN
 
-    // -- F. Identifier
+    // ===== F. Identifier =====
     IDENTIFIER,                          // user-defined name, max 16 characters
 
-    // -- G. Comments
+    // ===== G. Comments =====
     SINGLE_LINE_COMMENT,                 // # ...
     MULTI_LINE_COMMENT,                  // ## ... ##
 
-    // -- H. Whitespace
-    SPACE,
-    TAB,
-    NEWLINE,
-
-    // -- I. Control tokens
+    // ===== H. Control tokens =====
     EOF,                                 // end of source code
     ERROR                                // invalid or unrecognized lexeme
 }

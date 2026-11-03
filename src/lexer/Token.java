@@ -1,5 +1,23 @@
 package lexer;
 
+/**
+ * Token.java
+ * Represents one token produced by the GamiPhi lexical analyzer.
+ *
+ * A token stores four things:
+ *   1. lexeme - the exact text taken from the source code
+ *   2. type   - the TokenType assigned to that lexeme
+ *   3. line   - the line where the lexeme starts (first line is 1)
+ *   4. column - the column where the lexeme starts (first column is 1)
+ *
+ * Tokens are immutable. Pass 2 of the lexer never edits a token.
+ * When it needs to change a classification, it calls withType() to
+ * create a new token that keeps the same lexeme and source position.
+ *
+ * Whitespace is not tokenized, so no Token ever holds a lone space, tab,
+ * or newline. Those characters can still appear INSIDE other lexemes,
+ * for example in a multi-line comment or in an ERROR token.
+ */
 public final class Token {
 
     private final String lexeme;
@@ -28,7 +46,7 @@ public final class Token {
         this.column = column;
     }
 
-    // -- Getters
+    // ===== Getters =====
 
     public String getLexeme() {
         return lexeme;
@@ -46,7 +64,7 @@ public final class Token {
         return column;
     }
 
-    // -- Helper methods
+    // ===== Helper methods =====
 
     /**
      * Returns a new token with a different type but the same lexeme,
@@ -61,25 +79,24 @@ public final class Token {
         return type == TokenType.ERROR;
     }
 
-    /** True if this token is SPACE, TAB, or NEWLINE. */
-    public boolean isWhitespace() {
-        return type == TokenType.SPACE
-                || type == TokenType.TAB
-                || type == TokenType.NEWLINE;
-    }
-
     /** True if this token is a single-line or multi-line comment. */
     public boolean isComment() {
         return type == TokenType.SINGLE_LINE_COMMENT
                 || type == TokenType.MULTI_LINE_COMMENT;
     }
 
+    /**
+     * Returns a printable version of the lexeme for the tables.
+     * A multi-line comment or an error lexeme can contain newlines and tabs,
+     * which would break a table row, so they are shown as readable text:
+     *   newline -> \n
+     *   tab     -> \t
+     *   return  -> \r
+     * The EOF token has an empty lexeme, so it is shown as [EOF].
+     */
     public String getDisplayLexeme() {
         if (type == TokenType.EOF) {
             return "[EOF]";
-        }
-        if (type == TokenType.SPACE) {
-            return "[space]";
         }
 
         StringBuilder sb = new StringBuilder();

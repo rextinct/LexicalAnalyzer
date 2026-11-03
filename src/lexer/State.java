@@ -1,8 +1,26 @@
 package lexer;
 
+/**
+ * State.java
+ * Defines the states used by Pass 1 of the GamiPhi lexer.
+ *
+ * Pass 1 works like a DFA (deterministic finite automaton). It always sits
+ * in exactly one State, reads one character, and moves to the next State.
+ * Each State means "this is what I have seen so far".
+ *
+ * Whitespace (space, tab, newline) has no state. The lexer skips it before
+ * a lexeme begins, so START never sees it. Single-character delimiters
+ * (; , . ( ) [ ] { }) need no state of their own either. START can finish
+ * them immediately.
+ *
+ * Example of longest match for "+=":
+ *   START --'+'--> PLUS --'='--> DONE (ADDITION_ASSIGNMENT_OPERATOR)
+ * Example for "+" followed by a letter:
+ *   START --'+'--> PLUS --other--> DONE (ADDITION_OPERATOR)
+ */
 public enum State {
 
-    // -- Starting and finishing
+    // ===== Starting and finishing =====
 
     /** Beginning of a new lexeme. The lexer decides where to go from here. */
     START,
@@ -13,7 +31,7 @@ public enum State {
     /** A malformed lexeme was found. The lexer stores an ERROR token, then returns to START. */
     ERROR_STATE,
 
-    // -- Words
+    // ===== Words =====
 
     /**
      * Inside a word (letters, digits, underscore).
@@ -22,7 +40,7 @@ public enum State {
      */
     IN_WORD,
 
-    // -- Numbers
+    // ===== Numbers =====
 
     /** Inside a run of digits, such as 25. */
     IN_INTEGER,
@@ -33,7 +51,7 @@ public enum State {
     /** Inside the digits after the decimal point, such as 1.5. */
     IN_DECIMAL,
 
-    // -- String literals
+    // ===== String literals =====
 
     /** Inside a double-quoted string, after the opening quote. */
     IN_STRING,
@@ -41,7 +59,7 @@ public enum State {
     /** A backslash was read inside a string. The next character is an escape character. */
     STRING_ESCAPE,
 
-    // -- Character literals
+    // ===== Character literals =====
 
     /** The opening single quote was read. The character content comes next. */
     CHAR_OPEN,
@@ -52,7 +70,7 @@ public enum State {
     /** Exactly one character (or one escape) was read. A closing single quote must come next. */
     CHAR_BODY,
 
-    // -- Comments
+    // ===== Comments =====
 
     /** One '#' was read. A second '#' makes it a multi-line comment. Anything else makes it a single-line comment. */
     HASH,
@@ -66,7 +84,7 @@ public enum State {
     /** A '#' was read inside a multi-line comment. A second '#' closes the comment. */
     MULTI_LINE_COMMENT_HASH,
 
-    // -- Operators that can be longer than one character
+    // ===== Operators that can be longer than one character =====
 
     /** '+' was read. Could be +, ++, or +=. */
     PLUS,

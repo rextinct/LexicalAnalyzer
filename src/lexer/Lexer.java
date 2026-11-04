@@ -10,55 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Lexer.java
- * The two-pass lexical analyzer for GamiPhi.
- *
- * WHITESPACE
- *   Spaces, tabs and newlines are read (so line and column numbers stay
- *   correct) but they are NOT tokenized. They are skipped between tokens.
- *
- * PASS 1 (runPass1) - scanning and recognition
- *   Reads the source one character at a time using the State enum (a DFA).
- *   It uses lookahead for longest-match operators and decimal points.
- *   It produces an INTERMEDIATE list of tokens and creates ERROR tokens
- *   for malformed lexemes (bad strings, bad characters, bad numbers, ...).
- *   It never adds EOF.
- *
- * PASS 2 (runPass2) - validation and finalization
- *   Does NOT look at the source text again. It only walks the intermediate
- *   token list and, for each token:
- *     - re-checks keyword / reserved word / identifier classification
- *     - enforces the 16-character identifier limit
- *     - checks operators, delimiters, literals and comments
- *       against their official lexemes
- *   Then it appends exactly one EOF token.
- *
- * No syntax or semantic analysis is done here.
- */
 public class Lexer {
 
-    /** Maximum identifier length allowed by GamiPhi. */
-    public static final int MAX_IDENTIFIER_LENGTH = 16;
+    public static final int MAX_IDENTIFIER_LENGTH = 16; // Maximum identifier length allowed by GamiPhi.
 
-    /**
-     * Supported escape characters after a backslash in strings and
-     * character literals. (ASSUMPTION - not in the official token list.)
-     * Change this set if your language design uses different escapes.
-     */
     private static final Set<Character> VALID_ESCAPES =
             new HashSet<>(Arrays.asList('n', 't', 'r', '0', '\\', '\'', '"'));
 
-    // ===== Lookup tables =====
+    // -- Lookup tables
 
-    /** Case-sensitive keywords. */
-    private static final Map<String, TokenType> KEYWORDS = new LinkedHashMap<>();
+    private static final Map<String, TokenType> KEYWORDS = new LinkedHashMap<>(); // Case-sensitive keywords.
 
-    /** Case-sensitive reserved words. */
-    private static final Map<String, TokenType> RESERVED_WORDS = new LinkedHashMap<>();
+    private static final Map<String, TokenType> RESERVED_WORDS = new LinkedHashMap<>(); // Case-sensitive reserved words.
 
-    /** Every operator and delimiter lexeme. Used by Pass 2 to validate symbols. */
-    private static final Map<String, TokenType> SYMBOLS = new LinkedHashMap<>();
+    private static final Map<String, TokenType> SYMBOLS = new LinkedHashMap<>(); // Every operator and delimiter lexeme.
 
     static {
         // Keywords
@@ -112,12 +77,9 @@ public class Lexer {
         RESERVED_WORDS.put("RESUME", TokenType.RESUME_RESERVE_WORD);
         RESERVED_WORDS.put("PARALLEL", TokenType.PARALLEL_RESERVE_WORD);
         RESERVED_WORDS.put("SPAN", TokenType.SPAN_RESERVE_WORD);
-
-        // Java keywords
         RESERVED_WORDS.put("public", TokenType.PUBLIC_RESERVE_WORD);
         RESERVED_WORDS.put("private", TokenType.PRIVATE_RESERVE_WORD);
         RESERVED_WORDS.put("protected", TokenType.PROTECTED_RESERVE_WORD);
-            //OOP & Class Structures
         RESERVED_WORDS.put("void", TokenType.VOID_RESERVE_WORD);
         RESERVED_WORDS.put("abstract", TokenType.ABSTRACT_RESERVE_WORD);
         RESERVED_WORDS.put("class", TokenType.CLASS_RESERVE_WORD);
@@ -130,17 +92,16 @@ public class Lexer {
         RESERVED_WORDS.put("new", TokenType.NEW_RESERVE_WORD);
         RESERVED_WORDS.put("super", TokenType.SUPER_RESERVE_WORD);
         RESERVED_WORDS.put("this", TokenType.THIS_RESERVE_WORD);
-            //Exception Handling
         RESERVED_WORDS.put("assert", TokenType.ASSERT_RESERVE_WORD);
         RESERVED_WORDS.put("catch", TokenType.CATCH_RESERVE_WORD);
         RESERVED_WORDS.put("finally", TokenType.FINALLY_RESERVE_WORD);
         RESERVED_WORDS.put("throw", TokenType.THROW_RESERVE_WORD);
         RESERVED_WORDS.put("throws", TokenType.THROWS_RESERVE_WORD);
         RESERVED_WORDS.put("try", TokenType.TRY_RESERVE_WORD);
-            //Import and Packages
         RESERVED_WORDS.put("import", TokenType.IMPORT_RESERVE_WORD);
         RESERVED_WORDS.put("package", TokenType.PACKAGE_RESERVE_WORD);
-        // Assignment operators
+        
+        // Symbols
         SYMBOLS.put("=", TokenType.ASSIGNMENT_OPERATOR);
         SYMBOLS.put("+=", TokenType.ADDITION_ASSIGNMENT_OPERATOR);
         SYMBOLS.put("-=", TokenType.SUBTRACTION_ASSIGNMENT_OPERATOR);
@@ -148,28 +109,23 @@ public class Lexer {
         SYMBOLS.put("/=", TokenType.DIVISION_ASSIGNMENT_OPERATOR);
         SYMBOLS.put("%=", TokenType.MODULO_ASSIGNMENT_OPERATOR);
         SYMBOLS.put("~=", TokenType.LIVE_ASSIGNMENT_OPERATOR);
-        // Arithmetic operators
         SYMBOLS.put("+", TokenType.ADDITION_OPERATOR);
         SYMBOLS.put("-", TokenType.SUBTRACTION_OPERATOR);
         SYMBOLS.put("*", TokenType.MULTIPLICATION_OPERATOR);
         SYMBOLS.put("/", TokenType.DIVISION_OPERATOR);
         SYMBOLS.put("%", TokenType.MODULO_OPERATOR);
         SYMBOLS.put("**", TokenType.EXPONENT_OPERATOR);
-        // Increment / decrement
         SYMBOLS.put("++", TokenType.INCREMENT_OPERATOR);
         SYMBOLS.put("--", TokenType.DECREMENT_OPERATOR);
-        // Boolean operators
         SYMBOLS.put("!", TokenType.NOT_OPERATOR);
         SYMBOLS.put("&&", TokenType.AND_OPERATOR);
         SYMBOLS.put("||", TokenType.OR_OPERATOR);
-        // Relational operators
         SYMBOLS.put("==", TokenType.EQUALITY_OPERATOR);
         SYMBOLS.put("!=", TokenType.NOT_EQUAL_OPERATOR);
         SYMBOLS.put("<", TokenType.LESS_THAN_OPERATOR);
         SYMBOLS.put(">", TokenType.MORE_THAN_OPERATOR);
         SYMBOLS.put("<=", TokenType.LESS_THAN_EQUAL_OPERATOR);
         SYMBOLS.put(">=", TokenType.MORE_THAN_EQUAL_OPERATOR);
-        // Delimiters
         SYMBOLS.put(";", TokenType.STATEMENT_END_DELIMITER);
         SYMBOLS.put(",", TokenType.COMMA_DELIMITER);
         SYMBOLS.put(".", TokenType.ACCESS_OBJECT_DELIMITER);
@@ -181,9 +137,9 @@ public class Lexer {
         SYMBOLS.put("}", TokenType.CLOSE_BLOCK_DELIMITER);
     }
 
-    // ===== Lexical error record =====
+    // -- Lexical error record
 
-    /** One lexical error, shown in the error table. */
+    // One lexical error, shown in the error table.
     public static final class LexicalError {
         private final String lexeme;
         private final String description;
@@ -202,7 +158,7 @@ public class Lexer {
         public int getLine() { return line; }
         public int getColumn() { return column; }
 
-        /** Printable lexeme for the tables (tabs and newlines made visible). */
+        // Printable lexeme for the tables (tabs and newlines made visible).
         public String getDisplayLexeme() {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < lexeme.length(); i++) {
@@ -221,57 +177,49 @@ public class Lexer {
         }
     }
 
-    // ===== Instance fields =====
+    // -- Instance fields
 
     private final String source;
     private int pos;
     private int line;
     private int column;
-
-    /** Position just after the last character. Pass 2 gives EOF this position. */
     private int eofLine = 1;
     private int eofColumn = 1;
 
-    private final List<Token> intermediateTokens = new ArrayList<>();
-    private List<Token> finalTokens = new ArrayList<>();
-    private final List<LexicalError> errors = new ArrayList<>();
+    private final List<Token> intermediateTokens = new ArrayList<>(); // Tokens produced by pass 1.
+    private List<Token> finalTokens = new ArrayList<>(); // Tokens produced by pass 2.
+    private final List<LexicalError> errors = new ArrayList<>();  // Lexical errors encountered during processing.
+    private final Map<Token, String> errorMessages = new IdentityHashMap<>(); // Error descriptions, keyed by the ERROR token.
 
-    /** Error descriptions created in Pass 1, keyed by the ERROR token itself. */
-    private final Map<Token, String> errorMessages = new IdentityHashMap<>();
-
-    /**
-     * Creates a lexer for the given source code. The source can be any length.
-     * A leading byte-order mark (\uFEFF), which some editors add, is removed.
-     */
     public Lexer(String source) {
         if (source == null) {
             throw new IllegalArgumentException("Source code must not be null.");
         }
-        if (source.startsWith("\uFEFF")) {
+        if (source.startsWith("\uFEFF")) { // Removes any unwanted BOM character at the beginning.
             source = source.substring(1);
         }
         this.source = source;
     }
 
-    // ===== Public API =====
+    // -- Public API
 
-    /** Runs both passes and returns the final token list (ends with exactly one EOF). */
+    // Runs both passes and returns the final token list (ends with exactly one EOF).
     public List<Token> tokenize() {
         List<Token> intermediate = runPass1();
         return runPass2(intermediate);
     }
 
-    /** The intermediate tokens from Pass 1 (no EOF). */
+    // The intermediate tokens from Pass 1 (no EOF).
     public List<Token> getIntermediateTokens() {
         return Collections.unmodifiableList(intermediateTokens);
     }
 
-    /** The finalized tokens from Pass 2. */
+    // The finalized tokens from Pass 2.
     public List<Token> getTokens() {
         return Collections.unmodifiableList(finalTokens);
     }
 
-    /** The lexical errors, in source order. */
+    // The lexical errors, in source order.
     public List<LexicalError> getErrors() {
         return Collections.unmodifiableList(errors);
     }
@@ -280,7 +228,7 @@ public class Lexer {
     // PASS 1 - Scanning and recognition
     // =====================================================================
 
-    /** Scans the whole source and returns the intermediate token list. */
+    // Scans the whole source and returns the intermediate token list.
     public List<Token> runPass1() {
         pos = 0;
         line = 1;
@@ -290,6 +238,7 @@ public class Lexer {
         errors.clear();
         errorMessages.clear();
 
+        // Main scanning loop
         while (pos < source.length()) {
             if (isWhitespace(peek(0))) {
                 skipWhitespace();       // read but do not tokenize
@@ -303,11 +252,6 @@ public class Lexer {
         return getIntermediateTokens();
     }
 
-    /**
-     * Recognizes exactly one lexeme, starting at the current position,
-     * by moving through the states of the DFA until a final state is reached.
-     * The caller guarantees that the current character is not whitespace.
-     */
     private void scanToken() {
         final int startPos = pos;
         final int startLine = line;
@@ -711,10 +655,8 @@ public class Lexer {
     // PASS 2 - Validation and finalization
     // =====================================================================
 
-    /**
-     * Validates the intermediate tokens and returns the final token list.
-     * This method never reads the original source text.
-     */
+    // Validates the intermediate tokens and returns the final token list.
+ 
     public List<Token> runPass2(List<Token> intermediate) {
         errors.clear();
         List<Token> result = new ArrayList<>();
@@ -731,7 +673,7 @@ public class Lexer {
         return getTokens();
     }
 
-    /** Validates one token. Returns the same token, a corrected copy, or an ERROR token. */
+    // Validates one token. Returns the same token, a corrected copy, or an ERROR token.
     private Token finalizeToken(Token token) {
         TokenType type = token.getType();
         String lexeme = token.getLexeme();
@@ -791,7 +733,7 @@ public class Lexer {
         }
     }
 
-    /** Converts a token that failed validation into an ERROR token and records the error. */
+    // Converts a token that failed validation into an ERROR token and records the error.
     private Token rejectToken(Token token, String description) {
         Token errorToken = new Token(token.getLexeme(), TokenType.ERROR,
                 token.getLine(), token.getColumn());
@@ -804,7 +746,7 @@ public class Lexer {
     // Helper methods
     // =====================================================================
 
-    /** Decides whether a complete word is a keyword, reserved word, or identifier. */
+    // Decides whether a complete word is a keyword, reserved word, or identifier.
     private static TokenType classifyWord(String word) {
         TokenType type = KEYWORDS.get(word);
         if (type != null) {
@@ -817,14 +759,14 @@ public class Lexer {
         return TokenType.IDENTIFIER;
     }
 
-    /** True for IDENTIFIER and for every keyword or reserved word type. */
+    // True for IDENTIFIER and for every keyword or reserved word type.
     private static boolean isWordType(TokenType type) {
         return type == TokenType.IDENTIFIER
                 || KEYWORDS.containsValue(type)
                 || RESERVED_WORDS.containsValue(type);
     }
 
-    /** A valid word starts with a letter or '_' and contains only letters, digits, '_'. */
+    // A valid word starts with a letter or '_' and contains only letters, digits, '_'.
     private static boolean isValidWord(String word) {
         if (word.isEmpty() || !isWordStart(word.charAt(0))) {
             return false;
@@ -849,7 +791,7 @@ public class Lexer {
         return true;
     }
 
-    /** Maps the first character of a multi-character operator to its starting state. */
+    // Maps the first character of a multi-character operator to its starting state.
     private static State operatorStartState(int c) {
         switch (c) {
             case '+': return State.PLUS;
@@ -868,7 +810,7 @@ public class Lexer {
         }
     }
 
-    /** Maps a single-character delimiter to its token type, or null if c is not one. */
+    // Maps a single-character delimiter to its token type, or null if c is not one.
     private static TokenType delimiterType(int c) {
         switch (c) {
             case ';': return TokenType.STATEMENT_END_DELIMITER;
@@ -884,7 +826,7 @@ public class Lexer {
         }
     }
 
-    /** Describes a bad character for an error message (printable or U+XXXX code). */
+    // Describes a bad character for an error message (printable or U+XXXX code).
     private static String describeChar(int codePoint) {
         if (codePoint > 32 && codePoint < 127) {
             return "'" + (char) codePoint + "'";
@@ -910,7 +852,7 @@ public class Lexer {
         return isLetter(c) || isDigit(c) || c == '_';
     }
 
-    /** Space, tab, or a line break. These are skipped, never tokenized. */
+    // Space, tab, or a line break. These are skipped, never tokenized.
     private static boolean isWhitespace(int c) {
         return c == ' ' || c == '\t' || c == '\n' || c == '\r';
     }
@@ -921,16 +863,12 @@ public class Lexer {
 
     // ===== Reading the source =====
 
-    /** Looks at the character 'offset' positions ahead without consuming it. Returns -1 past the end. */
+    // Looks at the character 'offset' positions ahead without consuming it. Returns -1 past the end.
     private int peek(int offset) {
         int index = pos + offset;
         return (index < source.length()) ? source.charAt(index) : -1;
     }
 
-    /**
-     * Consumes one character and updates the line and column counters.
-     * A line break is "\n", "\r\n" (counted once, on the "\n"), or a lone "\r".
-     */
     private void advance() {
         char ch = source.charAt(pos++);
         boolean loneCarriageReturn = ch == '\r'
@@ -943,14 +881,14 @@ public class Lexer {
         }
     }
 
-    /** Consumes spaces, tabs and line breaks without producing any token. */
+    // Consumes spaces, tabs and line breaks without producing any token.
     private void skipWhitespace() {
         while (isWhitespace(peek(0))) {
             advance();
         }
     }
 
-    /** Consumes the rest of a run of letters, digits and underscores. */
+    // Consumes the rest of a run of letters, digits and underscores.
     private void consumeWordRest() {
         while (isWordPart(peek(0))) {
             advance();

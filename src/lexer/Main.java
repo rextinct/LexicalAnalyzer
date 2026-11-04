@@ -12,22 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Main.java
- * Entry point of the GamiPhi lexical analyzer.
- *
- * What it does:
- *   1. Reads the GamiPhi source code from a file (never hardcoded).
- *   2. Runs the two-pass Lexer.
- *   3. Prints the token table and, if needed, the error table.
- *   4. Writes GamiPhi_Tokens.html (a ready-made table you can open in a
- *      browser) into the main GamiPhiLexer project directory.
- *
- * How to run (from the GamiPhiLexer folder):
- *   javac -d bin src/lexer/*.java
- * java -cp bin lexer.Main input.txt
- * If no file name is given, the program asks for one.
- */
 public class Main {
 
     private static final String HTML_NAME = "GamiPhi_Tokens.html";
@@ -41,18 +25,18 @@ public class Main {
             Path projectDir = findProjectDirectory();
             Path inputPath = resolveInputPath(args, projectDir);
 
-            // ----- Read the source code -----
+            // Read the source code
             String source = readSource(inputPath);
             System.out.println("Source file : " + inputPath.toAbsolutePath());
             System.out.println("Characters  : " + source.length());
             System.out.println();
 
-            // ----- Run both passes -----
+            // Run both passes
             Lexer lexer = new Lexer(source);
             List<Token> tokens = lexer.tokenize();
             List<Lexer.LexicalError> errors = lexer.getErrors();
 
-            // ----- Console output -----
+            // Console output
             printTokenTable(tokens);
             if (errors.isEmpty()) {
                 System.out.println("No lexical errors found.");
@@ -63,7 +47,7 @@ public class Main {
             System.out.println("Total tokens (including EOF): " + tokens.size());
             System.out.println("Lexical errors              : " + errors.size());
 
-            // ----- HTML table output (open in any browser) -----
+            // HTML table output (open in any browser)
             Path htmlReport = projectDir.resolve(HTML_NAME);
             Files.write(htmlReport, buildHtmlReport(tokens, errors).getBytes(StandardCharsets.UTF_8));
             System.out.println();
@@ -79,7 +63,7 @@ public class Main {
     // Input handling
     // =====================================================================
 
-    /** Uses the first command-line argument as the file path, or asks the user. */
+    // Uses the first command-line argument as the file path, or asks the user.
     private static Path resolveInputPath(String[] args, Path projectDir) throws IOException {
         String name;
         if (args.length > 0 && !args[0].trim().isEmpty()) {
@@ -108,17 +92,13 @@ public class Main {
         return path;
     }
 
-    /** Reads the whole file as UTF-8. There is no fixed size limit. */
+    // Reads the whole file as UTF-8. There is no fixed size limit.
     private static String readSource(Path path) throws IOException {
         return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
     }
 
-    /**
-     * Finds the main GamiPhiLexer directory where the output files are saved.
-     * Order: a parent folder named GamiPhiLexer; the current folder if it has
-     * a src folder; the parent if we run from src, bin, or out; otherwise the
-     * current folder.
-     */
+    // Finds the main GamiPhiLexer directory where the output files are saved.
+
     private static Path findProjectDirectory() {
         Path current = Paths.get(System.getProperty("user.dir")).toAbsolutePath();
 
@@ -141,7 +121,7 @@ public class Main {
         return current;
     }
 
-    /** Makes the console use UTF-8 so unusual invalid characters print correctly. */
+    // Makes the console use UTF-8 so unusual invalid characters print correctly.
     private static void useUtf8Console() {
         try {
             System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
@@ -190,7 +170,7 @@ public class Main {
         printTable(headers, rows, new boolean[] {true, false, false, true, true});
     }
 
-    /** Prints a bordered table. Column widths grow to fit the data, so nothing is cut off. */
+    // Prints a bordered table. Column widths grow to fit the data, so nothing is cut off.
     private static void printTable(String[] headers, List<String[]> rows, boolean[] rightAligned) {
         int columns = headers.length;
         int[] widths = new int[columns];
@@ -253,7 +233,7 @@ public class Main {
                 .replace(">", "&gt;").replace("\"", "&quot;");
     }
 
-    /** Builds a web page with the token table (and the error table if needed). */
+    // Builds a web page with the token table (and the error table if needed).
     private static String buildHtmlReport(List<Token> tokens, List<Lexer.LexicalError> errors) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\">")

@@ -1,22 +1,14 @@
 package lexer;
 
-/**
- * TokenType.java
- * Lists every token type used by the GamiPhi lexical analyzer.
- * The names follow the official GamiPhi token list exactly.
- *
- * Whitespace (space, tab, newline) is NOT a token type. The lexer reads
- * whitespace so it can count lines and columns, but it skips it.
- */
 public enum TokenType {
 
-    // ===== A. Literals =====
+    // -- A. Literals
     INTEGER_LITERAL,
     DECIMAL_LITERAL,
     STRING_LITERAL,
     CHARACTER_LITERAL,
 
-    // ===== B. Operators =====
+    // -- B. Operators
     // Assignment operators
     ASSIGNMENT_OPERATOR,                 // =
     ADDITION_ASSIGNMENT_OPERATOR,        // +=
@@ -51,7 +43,7 @@ public enum TokenType {
     LESS_THAN_EQUAL_OPERATOR,            // <=
     MORE_THAN_EQUAL_OPERATOR,            // >=
 
-    // ===== C. Delimiters =====
+    // -- C. Delimiters
     STATEMENT_END_DELIMITER,             // ;
     COMMA_DELIMITER,                     // ,
     ACCESS_OBJECT_DELIMITER,             // .
@@ -62,7 +54,7 @@ public enum TokenType {
     OPEN_BLOCK_DELIMITER,                // {
     CLOSE_BLOCK_DELIMITER,               // }
 
-    // ===== D. Keywords (case-sensitive) =====
+    // -- D. Keywords (case-sensitive)
     MARK_KEYWORD,                        // Mark
     BOOL_DATA_TYPE,                      // Bool
     CHAR_DATA_TYPE,                      // Char
@@ -70,7 +62,7 @@ public enum TokenType {
     FLOAT_DATA_TYPE,                     // Float
     INT_DATA_TYPE,                       // Int
     STRING_DATA_TYPE,                    // String
-    VOID_DATA_TYPE,                     // Void
+    VOID_DATA_TYPE,                      // Void
     BOOLEAN_TRUE_KEYWORD,                // True
     BOOLEAN_FALSE_KEYWORD,               // False
     FOR_LOOP_KEYWORD,                    // For
@@ -83,10 +75,10 @@ public enum TokenType {
     PRINT_KEYWORD,                       // Print
     WRITE_KEYWORD,                       // Write
     RETURN_STATEMENT_KEYWORD,            // Return
-    SWITCH_KEYWORD,                       // Switch
-    CASE_KEYWORD,                       // Case
+    SWITCH_KEYWORD,                      // Switch
+    CASE_KEYWORD,                        // Case
 
-    // ===== E. Reserved words =====
+    // -- E. Reserved words
     ENTITY_RESERVE_WORD,                 // ENTITY
     COMP_RESERVE_WORD,                   // COMP
     BEHAVIOR_RESERVE_WORD,               // BEHAVIOR
@@ -112,43 +104,40 @@ public enum TokenType {
     PAUSE_RESERVE_WORD,                  // PAUSE
     RESUME_RESERVE_WORD,                 // RESUME
     PARALLEL_RESERVE_WORD,               // PARALLEL
-    SPAN_RESERVE_WORD,                  // SPAN
+    SPAN_RESERVE_WORD,                   // SPAN
 
-    // Java reserved keywords
-    PUBLIC_RESERVE_WORD,                // public
+    PUBLIC_RESERVE_WORD,                 // public
     PRIVATE_RESERVE_WORD,                // private
-    PROTECTED_RESERVE_WORD,                // protected
-    // OOP and class structures
-    VOID_RESERVE_WORD,                      // void
-    ABSTRACT_RESERVE_WORD,                      // abstract
-    CLASS_RESERVE_WORD,                      // class
-    ENUM_RESERVE_WORD,                      // enum
-    EXTENDS_RESERVE_WORD,                      // extends
-    IMPLEMENTS_RESERVE_WORD,                      // implements
-    INTERFACE_RESERVE_WORD,                      // interface
-    NATIVE_RESERVE_WORD,                      // native
-    NEW_RESERVE_WORD,                      // new
-    STATIC_RESERVE_WORD,                      // static
-    SUPER_RESERVE_WORD,                      // super
-    THIS_RESERVE_WORD,                      // this
-        //Exception Handling
-    ASSERT_RESERVE_WORD,                //assert
-    CATCH_RESERVE_WORD,                //catch
-    FINALLY_RESERVE_WORD,                //finally
-    THROW_RESERVE_WORD,                //throw
-    THROWS_RESERVE_WORD,                //throws
-    TRY_RESERVE_WORD,                //try
-        //Packages and Imports
-    IMPORT_RESERVE_WORD,        //import
-    PACKAGE_RESERVE_WORD,        //package
-    // ===== F. Identifier =====
+    PROTECTED_RESERVE_WORD,              // protecteds
+    VOID_RESERVE_WORD,                   // void
+    ABSTRACT_RESERVE_WORD,               // abstract
+    CLASS_RESERVE_WORD,                  // class
+    ENUM_RESERVE_WORD,                   // enum
+    EXTENDS_RESERVE_WORD,                // extends
+    IMPLEMENTS_RESERVE_WORD,             // implements
+    INTERFACE_RESERVE_WORD,              // interface
+    NATIVE_RESERVE_WORD,                 // native
+    NEW_RESERVE_WORD,                    // new
+    STATIC_RESERVE_WORD,                 // static
+    SUPER_RESERVE_WORD,                  // super
+    THIS_RESERVE_WORD,                   // this
+    ASSERT_RESERVE_WORD,                 // assert
+    CATCH_RESERVE_WORD,                  // catch
+    FINALLY_RESERVE_WORD,                // finally
+    THROW_RESERVE_WORD,                  // throw
+    THROWS_RESERVE_WORD,                 // throws
+    TRY_RESERVE_WORD,                    // try
+    IMPORT_RESERVE_WORD,                 // import
+    PACKAGE_RESERVE_WORD,                // package
+
+    // -- F. Identifier
     IDENTIFIER,                          // user-defined name, max 16 characters
 
-    // ===== G. Comments =====
+    // -- G. Comments
     SINGLE_LINE_COMMENT,                 // # ...
     MULTI_LINE_COMMENT,                  // ## ... ##
 
-    // ===== H. Control tokens =====
+    // -- H. Control tokens
     EOF,                                 // end of source code
     ERROR                                // invalid or unrecognized lexeme
 }

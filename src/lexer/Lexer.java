@@ -82,6 +82,8 @@ public class Lexer {
         KEYWORDS.put("Print", TokenType.PRINT_KEYWORD);
         KEYWORDS.put("Write", TokenType.WRITE_KEYWORD);
         KEYWORDS.put("Return", TokenType.RETURN_STATEMENT_KEYWORD);
+        KEYWORDS.put("Switch", TokenType.SWITCH_KEYWORD);
+        KEYWORDS.put("Case", TokenType.CASE_KEYWORD);
 
         // Reserved words
         RESERVED_WORDS.put("ENTITY", TokenType.ENTITY_RESERVE_WORD);
@@ -111,6 +113,33 @@ public class Lexer {
         RESERVED_WORDS.put("PARALLEL", TokenType.PARALLEL_RESERVE_WORD);
         RESERVED_WORDS.put("SPAN", TokenType.SPAN_RESERVE_WORD);
 
+        // Java keywords
+        RESERVED_WORDS.put("public", TokenType.PUBLIC_RESERVE_WORD);
+        RESERVED_WORDS.put("private", TokenType.PRIVATE_RESERVE_WORD);
+        RESERVED_WORDS.put("protected", TokenType.PROTECTED_RESERVE_WORD);
+            //OOP & Class Structures
+        RESERVED_WORDS.put("void", TokenType.VOID_RESERVE_WORD);
+        RESERVED_WORDS.put("abstract", TokenType.ABSTRACT_RESERVE_WORD);
+        RESERVED_WORDS.put("class", TokenType.CLASS_RESERVE_WORD);
+        RESERVED_WORDS.put("enum", TokenType.ENUM_RESERVE_WORD);
+        RESERVED_WORDS.put("extends", TokenType.EXTENDS_RESERVE_WORD);
+        RESERVED_WORDS.put("implements", TokenType.IMPLEMENTS_RESERVE_WORD);
+        RESERVED_WORDS.put("interface", TokenType.INTERFACE_RESERVE_WORD);
+        RESERVED_WORDS.put("native", TokenType.NATIVE_RESERVE_WORD);
+        RESERVED_WORDS.put("static", TokenType.STATIC_RESERVE_WORD);
+        RESERVED_WORDS.put("new", TokenType.NEW_RESERVE_WORD);
+        RESERVED_WORDS.put("super", TokenType.SUPER_RESERVE_WORD);
+        RESERVED_WORDS.put("this", TokenType.THIS_RESERVE_WORD);
+            //Exception Handling
+        RESERVED_WORDS.put("assert", TokenType.ASSERT_RESERVE_WORD);
+        RESERVED_WORDS.put("catch", TokenType.CATCH_RESERVE_WORD);
+        RESERVED_WORDS.put("finally", TokenType.FINALLY_RESERVE_WORD);
+        RESERVED_WORDS.put("throw", TokenType.THROW_RESERVE_WORD);
+        RESERVED_WORDS.put("throws", TokenType.THROWS_RESERVE_WORD);
+        RESERVED_WORDS.put("try", TokenType.TRY_RESERVE_WORD);
+            //Import and Packages
+        RESERVED_WORDS.put("import", TokenType.IMPORT_RESERVE_WORD);
+        RESERVED_WORDS.put("package", TokenType.PACKAGE_RESERVE_WORD);
         // Assignment operators
         SYMBOLS.put("=", TokenType.ASSIGNMENT_OPERATOR);
         SYMBOLS.put("+=", TokenType.ADDITION_ASSIGNMENT_OPERATOR);

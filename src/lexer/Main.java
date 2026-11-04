@@ -22,6 +22,11 @@ import java.util.Scanner;
  *   3. Prints the token table and, if needed, the error table.
  *   4. Writes GamiPhi_Tokens.html (a ready-made table you can open in a
  *      browser) into the main GamiPhiLexer project directory.
+ *
+ * How to run (from the GamiPhiLexer folder):
+ *   javac -d bin src/lexer/*.java
+ * java -cp bin lexer.Main input.txt
+ * If no file name is given, the program asks for one.
  */
 public class Main {
 
@@ -156,11 +161,11 @@ public class Main {
         int number = 1;
         for (Token t : tokens) {
             rows.add(new String[] {
-                String.valueOf(number++),
-                t.getDisplayLexeme(),
-                t.getType().name(),
-                String.valueOf(t.getLine()),
-                String.valueOf(t.getColumn())
+                    String.valueOf(number++),
+                    t.getDisplayLexeme(),
+                    t.getType().name(),
+                    String.valueOf(t.getLine()),
+                    String.valueOf(t.getColumn())
             });
         }
         System.out.println("TOKEN TABLE");
@@ -174,11 +179,11 @@ public class Main {
         int number = 1;
         for (Lexer.LexicalError e : errors) {
             rows.add(new String[] {
-                String.valueOf(number++),
-                e.getDisplayLexeme(),
-                e.getDescription(),
-                String.valueOf(e.getLine()),
-                String.valueOf(e.getColumn())
+                    String.valueOf(number++),
+                    e.getDisplayLexeme(),
+                    e.getDescription(),
+                    String.valueOf(e.getLine()),
+                    String.valueOf(e.getColumn())
             });
         }
         System.out.println("LEXICAL ERROR TABLE");
@@ -252,15 +257,15 @@ public class Main {
     private static String buildHtmlReport(List<Token> tokens, List<Lexer.LexicalError> errors) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\">")
-          .append("<title>GamiPhi Lexer Output</title>\n")
-          .append("<style>body{font-family:Arial,sans-serif;margin:20px}")
-          .append("table{border-collapse:collapse;margin-bottom:30px}")
-          .append("th,td{border:1px solid #000;padding:4px 10px;text-align:left}")
-          .append("td.num{text-align:right}")
-          .append("td.lex{font-family:Consolas,monospace}</style></head><body>\n");
+                .append("<title>GamiPhi Lexer Output</title>\n")
+                .append("<style>body{font-family:Arial,sans-serif;margin:20px}")
+                .append("table{border-collapse:collapse;margin-bottom:30px}")
+                .append("th,td{border:1px solid #000;padding:4px 10px;text-align:left}")
+                .append("td.num{text-align:right}")
+                .append("td.lex{font-family:Consolas,monospace}</style></head><body>\n");
 
         sb.append("<h2>Token Table</h2>\n<table>\n")
-          .append("<tr><th>No.</th><th>Lexeme</th><th>Token Type</th><th>Line</th><th>Column</th></tr>\n");
+                .append("<tr><th>No.</th><th>Lexeme</th><th>Token Type</th><th>Line</th><th>Column</th></tr>\n");
         int number = 1;
         for (Token t : tokens) {
             sb.append("<tr><td class=\"num\">").append(number++).append("</td>")
@@ -273,14 +278,14 @@ public class Main {
 
         if (!errors.isEmpty()) {
             sb.append("<h2>Lexical Error Table</h2>\n<table>\n")
-              .append("<tr><th>No.</th><th>Lexeme</th><th>Error Description</th><th>Line</th><th>Column</th></tr>\n");
+                    .append("<tr><th>No.</th><th>Lexeme</th><th>Error Description</th><th>Line</th><th>Column</th></tr>\n");
             number = 1;
             for (Lexer.LexicalError e : errors) {
                 sb.append("<tr><td class=\"num\">").append(number++).append("</td>")
-                  .append("<td class=\"lex\">").append(htmlEscape(e.getDisplayLexeme())).append("</td>")
-                  .append("<td>").append(htmlEscape(e.getDescription())).append("</td>")
-                  .append("<td class=\"num\">").append(e.getLine()).append("</td>")
-                  .append("<td class=\"num\">").append(e.getColumn()).append("</td></tr>\n");
+                        .append("<td class=\"lex\">").append(htmlEscape(e.getDisplayLexeme())).append("</td>")
+                        .append("<td>").append(htmlEscape(e.getDescription())).append("</td>")
+                        .append("<td class=\"num\">").append(e.getLine()).append("</td>")
+                        .append("<td class=\"num\">").append(e.getColumn()).append("</td></tr>\n");
             }
             sb.append("</table>\n");
         }

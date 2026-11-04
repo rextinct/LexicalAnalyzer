@@ -70,7 +70,7 @@ public enum TokenType {
     FLOAT_DATA_TYPE,                     // Float
     INT_DATA_TYPE,                       // Int
     STRING_DATA_TYPE,                    // String
-    VOID_DATA_TYPE,                      // Void
+    VOID_DATA_TYPE,                     // Void
     BOOLEAN_TRUE_KEYWORD,                // True
     BOOLEAN_FALSE_KEYWORD,               // False
     FOR_LOOP_KEYWORD,                    // For
@@ -83,6 +83,8 @@ public enum TokenType {
     PRINT_KEYWORD,                       // Print
     WRITE_KEYWORD,                       // Write
     RETURN_STATEMENT_KEYWORD,            // Return
+    SWITCH_KEYWORD,                       // Switch
+    CASE_KEYWORD,                       // Case
 
     // ===== E. Reserved words =====
     ENTITY_RESERVE_WORD,                 // ENTITY
@@ -110,8 +112,35 @@ public enum TokenType {
     PAUSE_RESERVE_WORD,                  // PAUSE
     RESUME_RESERVE_WORD,                 // RESUME
     PARALLEL_RESERVE_WORD,               // PARALLEL
-    SPAN_RESERVE_WORD,                   // SPAN
+    SPAN_RESERVE_WORD,                  // SPAN
 
+    // Java reserved keywords
+    PUBLIC_RESERVE_WORD,                // public
+    PRIVATE_RESERVE_WORD,                // private
+    PROTECTED_RESERVE_WORD,                // protected
+    // OOP and class structures
+    VOID_RESERVE_WORD,                      // void
+    ABSTRACT_RESERVE_WORD,                      // abstract
+    CLASS_RESERVE_WORD,                      // class
+    ENUM_RESERVE_WORD,                      // enum
+    EXTENDS_RESERVE_WORD,                      // extends
+    IMPLEMENTS_RESERVE_WORD,                      // implements
+    INTERFACE_RESERVE_WORD,                      // interface
+    NATIVE_RESERVE_WORD,                      // native
+    NEW_RESERVE_WORD,                      // new
+    STATIC_RESERVE_WORD,                      // static
+    SUPER_RESERVE_WORD,                      // super
+    THIS_RESERVE_WORD,                      // this
+        //Exception Handling
+    ASSERT_RESERVE_WORD,                //assert
+    CATCH_RESERVE_WORD,                //catch
+    FINALLY_RESERVE_WORD,                //finally
+    THROW_RESERVE_WORD,                //throw
+    THROWS_RESERVE_WORD,                //throws
+    TRY_RESERVE_WORD,                //try
+        //Packages and Imports
+    IMPORT_RESERVE_WORD,        //import
+    PACKAGE_RESERVE_WORD,        //package
     // ===== F. Identifier =====
     IDENTIFIER,                          // user-defined name, max 16 characters
 
@@ -123,3 +152,4 @@ public enum TokenType {
     EOF,                                 // end of source code
     ERROR                                // invalid or unrecognized lexeme
 }
+

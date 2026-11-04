@@ -1,14 +1,23 @@
-## header comment
-spans two lines ##
-# single-line comment
-Mark Bool Char Double Float Int String Void True False
-For Do While Break Continue If Else Print Write Return
-ENTITY COMP BEHAVIOR USE ADD SPAWN DESTROY RANK SPOTLIGHT SCENE LOAD KEEP
-OVER BACK WHEN TOUCH INPUT TRIGGER TRIGGER_ON AFTER SECONDS WAIT PAUSE RESUME PARALLEL SPAN
-= += -= *= /= %= ~= + - * / % ** ++ -- ! && || == != < > <= >=
-; , . ( ) [ ] { }
-0 25 100 1.5 16.0 2.0f "Alex" 'B' '\n'
-mark player_1 _hidden abcdefghijklmnop
-Do { x++; } While (x<=10);
-obj.name a+++b x**2
-	tab line
+KEEP Int score = 0;
+
+SCENE Level1 {
+    TIMER 60 SECONDS;
+
+    WHEN (timer.isFinished) {
+        LOAD GameOver;
+    }
+
+    WHEN (levelComplete) {
+        score += 100;
+        LOAD Level2;
+    }
+}
+
+SCENE GameOver {
+    SHOW "Game Over!";
+    SHOW score;
+}
+
+SCENE Level2 {
+    SHOW score;
+}

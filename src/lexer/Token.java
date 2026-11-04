@@ -61,13 +61,6 @@ public final class Token {
         return type == TokenType.ERROR;
     }
 
-    /** True if this token is SPACE, TAB, or NEWLINE. */
-    public boolean isWhitespace() {
-        return type == TokenType.SPACE
-                || type == TokenType.TAB
-                || type == TokenType.NEWLINE;
-    }
-
     /** True if this token is a single-line or multi-line comment. */
     public boolean isComment() {
         return type == TokenType.SINGLE_LINE_COMMENT
@@ -77,9 +70,6 @@ public final class Token {
     public String getDisplayLexeme() {
         if (type == TokenType.EOF) {
             return "[EOF]";
-        }
-        if (type == TokenType.SPACE) {
-            return "[space]";
         }
 
         StringBuilder sb = new StringBuilder();

@@ -1,23 +1,56 @@
+## Demo: CoinRush ##
+
+# Mark: pixels and tiles can't be mixed by accident
+Float tileSize = 16.0 Mark Pixels;
+Float padding = 4.0 Mark Pixels;
+
+# Entity Composition: stats and behavior are reusable parts
+COMP Stats {
+    Int health = 50;
+    Int damage = 5;
+}
+
+BEHAVIOR Moving(ENTITY actor) {
+    WHEN (INPUT.D.isPressed) {
+        actor.positionX += 2;
+    }
+}
+
+ENTITY Player {
+    ADD Stats;
+    ADD Moving(Player);
+    USE Moving;
+}
+
+# Live Binding: totalDamage updates itself
+Int weaponDamage = 20;
+Int totalDamage ~= Player.damage + weaponDamage;
+
+# Events and Conditions
+WHEN (Player TOUCH Enemy1) {
+    Player.health -= 3;
+}
+
+TRIGGER_ON PlayerDeath {
+    Player.health <= 0;
+}
+
+TRIGGER PlayerDeath {
+    DESTROY Player;
+}
+
+# Scene and Persistence: score survives LOAD
 KEEP Int score = 0;
 
 SCENE Level1 {
-    TIMER 60 SECONDS;
-
-    WHEN (timer.isFinished) {
-        LOAD GameOver;
+    WHEN (Player TOUCH Coin) {
+        score += 10;
     }
-
     WHEN (levelComplete) {
-        score += 100;
         LOAD Level2;
     }
 }
 
-SCENE GameOver {
-    SHOW "Game Over!";
-    SHOW score;
-}
-
 SCENE Level2 {
-    SHOW score;
+    Print(score);
 }

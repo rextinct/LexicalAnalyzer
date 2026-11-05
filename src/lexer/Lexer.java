@@ -34,7 +34,6 @@ public class Lexer {
         KEYWORDS.put("Float", TokenType.FLOAT_DATA_TYPE);
         KEYWORDS.put("Int", TokenType.INT_DATA_TYPE);
         KEYWORDS.put("String", TokenType.STRING_DATA_TYPE);
-        KEYWORDS.put("Void", TokenType.VOID_DATA_TYPE);
         KEYWORDS.put("True", TokenType.BOOLEAN_TRUE_KEYWORD);
         KEYWORDS.put("False", TokenType.BOOLEAN_FALSE_KEYWORD);
         KEYWORDS.put("For", TokenType.FOR_LOOP_KEYWORD);
@@ -895,5 +894,4 @@ public class Lexer {
         }
     }
 }
-
 

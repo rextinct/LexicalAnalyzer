@@ -62,7 +62,6 @@ public enum TokenType {
     FLOAT_DATA_TYPE,                     // Float
     INT_DATA_TYPE,                       // Int
     STRING_DATA_TYPE,                    // String
-    VOID_DATA_TYPE,                      // Void
     BOOLEAN_TRUE_KEYWORD,                // True
     BOOLEAN_FALSE_KEYWORD,               // False
     FOR_LOOP_KEYWORD,                    // For
@@ -141,4 +140,3 @@ public enum TokenType {
     EOF,                                 // end of source code
     ERROR                                // invalid or unrecognized lexeme
 }
-
